@@ -1,0 +1,30 @@
+version: "3"
+services:
+   nginx:
+     build: ./nginx/
+     restart: always
+     ports:
+       - 80:80
+  
+     volumes:
+         - ./php/:/var/www/html/
+
+   php:
+     build: ./php/
+     restart: always
+     expose:
+       - 9000
+     volumes:
+        - ./php/:/var/www/html/
+
+   redis:
+     build: ./redis/
+     restart: always
+     expose:
+       - 6379
+    
+   db:    
+    build: ./mariadb/
+    restart: always
+    expose:
+       - 3306
