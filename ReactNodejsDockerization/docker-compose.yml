@@ -1,0 +1,36 @@
+version: '3'
+services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    container_name: mongodb
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    container_name: backend
+    ports:
+      - "80:80"
+    depends_on:
+      - mongodb
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+    container_name: frontend
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  data:
+  logs:
